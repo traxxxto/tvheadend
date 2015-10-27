@@ -3023,7 +3023,6 @@ dvr_entry_cancel_delete(dvr_entry_t *de, int rerecord)
     dvr_entry_destroy(de, 1);
     break;
 
-  switch(de->de_sched_state) {
   case DVR_RECORDING:
     de->de_dont_reschedule = 1;
     dvr_stop_recording(de, SM_CODE_ABORTED, 1, 0);
