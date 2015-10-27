@@ -1,0 +1,44 @@
+.heading {
+	background-color: rgb(51, 122, 183);
+	color: white;
+}
+
+.recTitle {
+	font-size: 1.2em;
+
+	color: rgb(51, 122, 183);
+}
+
+.recDescr, .recComment {
+	font-size: 0.8em;
+
+}
+
+.recording, .warning {
+	color: red;
+}
+
+.recDisabled {
+	color: #CACACA;
+}
+
+.scheduled {
+	;
+}
+
+.divEntry {
+  padding: 10px;
+  background-color: #F8F7FF;
+  border-bottom: 1px solid #B5B6D5;
+  position: relative;
+  text-align: justify;
+  padding-right: 45px;
+}
+
+.btn-edit {
+    position: absolute;
+	
+    bottom: 10px;
+    right: 10px;
+}
+

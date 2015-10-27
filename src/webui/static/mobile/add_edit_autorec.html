@@ -1,0 +1,133 @@
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<script type="text/javascript" language="javascript" src="lib/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" language="javascript" src="lib/bootstrap.min.js"></script>
+	<link rel = "stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel = "stylesheet" type="text/css" href="css/general.css">
+	<script type="text/javascript" language="javascript" src="common.js"></script>
+	<script type="text/javascript" language="javascript" src="add_edit_autorec.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12 heading">
+				<h3>Editar Grabacion automatica</h3>
+				<br>
+			</div>
+		</div>
+		<div class="row" >
+			<div id="Principal" class="col-xs-12">
+				<form id="myform">
+					<input id="input-uuid" type ="hidden" name="uuid">
+				    <div class="checkbox">
+				        <label><input id="input-enabled" type="checkbox" name="enabled" value="true" checked="true"> Habilitado</label>
+				    </div>
+				    <div class="form-group">
+				        <label for="input-name">Nombre</label>
+				        <input type="text" class="form-control" id="input-name" name="name" placeholder="Nombre identificativo">
+				    </div>
+
+				    <div class="form-group">
+				        <label for="input-title">Expresion</label>
+				        <input type="text" class="form-control" id="input-title" name="title" placeholder="Expresion a buscar">
+				    </div>
+				    <div class="form-group">
+				        <label for="input-directory">Directorio</label>
+				        <input type="text" class="form-control" id="input-directory" name="directory" placeholder="Directorio donde guardar las grabaciones">
+				    </div>
+				    <div class="checkbox">
+				        <label><input id="input-fulltext" type="checkbox" name="fulltext" value="true"> Coincidencia exacta</label>
+				    </div>
+				    <div class="form-group">
+				        <label for="input-channel">Canal</label>
+				        <select class="form-control" id="input-channel" name="channel" placeholder="Canal">
+				        	<option value="">(no especificado)</option>
+				        </select>
+				    </div>
+				    <div class="form-group">
+				        <label for="input-tag">Grupo de canales</label>
+				        <select class="form-control" id="input-tag" name="tag" placeholder="Tag o grupo de canales">
+				        	<option value="">(no especificado)</option>
+				        </select>
+				    </div>
+
+				    <div class="form-group">
+				    	<label> Dias: </label>
+	   				    <div class="checkbox checkbox-inline">
+					        <label><input id = "input-weekdays-1" type="checkbox" name="weekdays" value="1" checked="true"> L </label>
+					    </div>
+	   				    <div class="checkbox checkbox-inline">
+					        <label><input id = "input-weekdays-2" type="checkbox" name="weekdays" value="2" checked="true"> M </label>
+					    </div>
+	   				    <div class="checkbox checkbox-inline">
+					        <label><input id = "input-weekdays-3" type="checkbox" name="weekdays" value="3" checked="true"> X </label>
+					    </div>
+	   				    <div class="checkbox checkbox-inline">
+					        <label><input id = "input-weekdays-4" type="checkbox" name="weekdays" value="4" checked="true"> J </label>
+					    </div>
+	   				    <div class="checkbox checkbox-inline">
+					        <label><input id = "input-weekdays-5" type="checkbox" name="weekdays" value="5" checked="true"> V </label>
+					    </div>
+	   				    <div class="checkbox checkbox-inline">
+					        <label><input id = "input-weekdays-6" type="checkbox" name="weekdays" value="6" checked="true"> S </label>
+					    </div>
+	   				    <div class="checkbox checkbox-inline">
+					        <label><input id = "input-weekdays-7" type="checkbox" name="weekdays" value="7" checked="true"> D </label>
+					    </div>
+					</div>
+
+				    <div class="form-group">
+				        <label for="input-start">Comenzar despues de</label>
+				        <input type="time" class="form-control" id="input-start" name="start">
+				    </div>
+
+				    <div class="form-group">
+				        <label for="input-start_window">Comenzar antes de</label>
+				        <input type="time" class="form-control" id="input-start_window" name="start_window">
+				    </div>
+
+	
+					<div class="form-group">
+						<label>Prioridad: </label>
+	   				    <div class="radiogroup radio-inline">
+					        <label><input id = "input-pri-5" type="radio" name="pri" value="5"> No especificada </label>
+					    </div>
+	   				    <div class="radiogroup radio-inline">
+					        <label><input id = "input-pri-4" type="radio" name="pri" value="4"> Muy Baja </label>
+					    </div>
+	   				    <div class="radiogroup radio-inline">
+					        <label><input id = "input-pri-3" type="radio" name="pri" value="3">  Baja </label>
+					    </div>
+	   				    <div class="radiogroup radio-inline">
+					        <label><input id = "input-pri-2" type="radio" name="pri" value="2"> Normal </label>
+					    </div>
+	   				    <div class="radiogroup radio-inline">
+					        <label><input id = "input-pri-1" type="radio" name="pri" value="1"> Alta </label>
+					    </div>
+	   				    <div class="radiogroup radio-inline">
+					        <label><input id = "input-pri-0" type="radio" name="pri" value="0"> Muy Alta </label>
+					    </div>
+
+					</div>
+				    <div class="form-group">
+				        <label for="input-start_extra">Tiempo extra al comienzo de la grabacion</label>
+				        <input type="text" class="form-control" id="input-start_extra" name="start_extra" placeholder="0 (Se aplica configracion de Canal o DVR)">
+				    </div>
+				    <div class="form-group">
+				        <label for="input-stop_extra">Tiempo extra al final de la grabacion</label>
+				        <input type="text" class="form-control" id="input-stop_extra" name="stop_extra" placeholder="0 (Se aplica configracion de Canal o DVR)">
+				    </div>
+				    <div class="form-group">
+				        <label for="input-record">Entradas duplicadas</label>
+				        <input type="text" class="form-control" id="input-record">
+				    </div>
+				    <button type="button" class="btn btn-primary" onclick="saveAutorecord();">Guardar</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
