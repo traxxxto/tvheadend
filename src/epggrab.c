@@ -360,6 +360,7 @@ void epggrab_init ( void )
   /* Initialise modules */
 #if ENABLE_MPEGTS
   eit_init();
+  psip_init();
   opentv_init();
 #endif
   pyepg_init();
@@ -398,8 +399,9 @@ void epggrab_done ( void )
     if (mod->done)
       mod->done(mod);
     pthread_mutex_lock(&global_lock);
-    epggrab_channel_flush(mod->channels, 0);
+    epggrab_channel_flush(mod, 0);
     free((void *)mod->id);
+    free((void *)mod->saveid);
     free((void *)mod->name);
     free(mod);
   }

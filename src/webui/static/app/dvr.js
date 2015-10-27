@@ -314,10 +314,40 @@ tvheadend.dvr_finished = function(panel, index) {
         }
     };
 
+    var rerecordButton = {
+        name: 'rerecord',
+        builder: function() {
+            return new Ext.Toolbar.Button({
+                tooltip: _('Toggle re-record functionality'),
+                iconCls: 'rerecord',
+                text: _('Re-record'),
+                disabled: true
+            });
+        },
+        callback: function(conf, e, store, select) {
+            var r = select.getSelections();
+            if (r && r.length > 0) {
+                var uuids = [];
+                for (var i = 0; i < r.length; i++)
+                    uuids.push(r[i].id);
+                tvheadend.Ajax({
+                    url: 'api/dvr/entry/rerecord/toggle',
+                    params: {
+                        uuid: Ext.encode(uuids)
+                    },
+                    success: function(d) {
+                        store.reload();
+                    }
+                });
+            }
+        }
+    };
+
     function selected(s, abuttons) {
         var r = s.getSelections();
         var b = r.length > 0 && r[0].data.filesize > 0;
         abuttons.download.setDisabled(!b);
+        abuttons.rerecord.setDisabled(!b);
     }
 
     tvheadend.idnode_grid(panel, {
@@ -359,7 +389,7 @@ tvheadend.dvr_finished = function(panel, index) {
                            '?title=' + encodeURIComponent(title) + '">' + _('Play') + '</a>';
                 }
             }],
-        tbar: [downloadButton],
+        tbar: [downloadButton, rerecordButton],
         selected: selected,
         help: function() {
             new tvheadend.help(_('DVR - Finished Recordings'), 'dvr_finished.html');
@@ -395,10 +425,40 @@ tvheadend.dvr_failed = function(panel, index) {
         }
     };
 
+    var rerecordButton = {
+        name: 'rerecord',
+        builder: function() {
+            return new Ext.Toolbar.Button({
+                tooltip: _('Toggle re-record functionality'),
+                iconCls: 'rerecord',
+                text: _('Re-record'),
+                disabled: true
+            });
+        },
+        callback: function(conf, e, store, select) {
+            var r = select.getSelections();
+            if (r && r.length > 0) {
+                var uuids = [];
+                for (var i = 0; i < r.length; i++)
+                    uuids.push(r[i].id);
+                tvheadend.Ajax({
+                    url: 'api/dvr/entry/rerecord/toggle',
+                    params: {
+                        uuid: Ext.encode(uuids)
+                    },
+                    success: function(d) {
+                        store.reload();
+                    }
+                });
+            }
+        }
+    };
+
     function selected(s, abuttons) {
         var r = s.getSelections();
         var b = r.length > 0 && r[0].data.filesize > 0;
         abuttons.download.setDisabled(!b);
+        abuttons.rerecord.setDisabled(r.length <= 0);
     }
 
     tvheadend.idnode_grid(panel, {
@@ -440,7 +500,7 @@ tvheadend.dvr_failed = function(panel, index) {
                            '?title=' + encodeURIComponent(title) + '">' + _('Play') + '</a>';
                 }
             }],
-        tbar: [downloadButton],
+        tbar: [downloadButton, rerecordButton],
         selected: selected,
         help: function() {
             new tvheadend.help(_('DVR - Failed Recordings'), 'dvr_failed.html');
@@ -513,7 +573,7 @@ tvheadend.autorec_editor = function(panel, index) {
             retention:    { width: 80 },
             removal:      { width: 80 },
             maxcount:     { width: 80 },
-            max_sched_count: { width: 80 },
+            maxsched:     { width: 80 },
             config_name:  { width: 120 },
             owner:        { width: 100 },
             creator:      { width: 200 },
@@ -524,7 +584,7 @@ tvheadend.autorec_editor = function(panel, index) {
             params: {
                list: 'enabled,name,directory,title,fulltext,channel,tag,content_type,minduration,' +
                      'maxduration,weekdays,start,start_window,pri,dedup,retention,removal,' +
-                     'maxcount,max_sched_count,config_name,comment'
+                     'maxcount,maxsched,config_name,comment'
             },
             create: { }
         },

@@ -596,6 +596,7 @@ config_migrate_v6 ( void )
         m = htsmsg_get_map(c, "mod_enabled");
       }
       htsmsg_add_u32(m, "eit", 1);
+      htsmsg_add_u32(m, "psip", 1);
       htsmsg_add_u32(m, "uk_freesat", 1);
       htsmsg_add_u32(m, "uk_freeview", 1);
       htsmsg_add_u32(m, "viasat_baltic", 1);
@@ -1348,10 +1349,10 @@ config_migrate_v22 ( void )
 }
 
 /*
- * v21 -> v23 : epggrab xmltv channels
+ * v21 -> v23 : epggrab xmltv/pyepg channels
  */
 static void
-config_migrate_v23 ( void )
+config_migrate_v23_one ( const char *modname )
 {
   htsmsg_t *c, *m, *n;
   htsmsg_field_t *f;
@@ -1359,7 +1360,7 @@ config_migrate_v23 ( void )
   int64_t num;
   tvh_uuid_t u;
 
-  if ((c = hts_settings_load_r(1, "epggrab/xmltv/channels")) != NULL) {
+  if ((c = hts_settings_load_r(1, "epggrab/%s/channels", modname)) != NULL) {
     HTSMSG_FOREACH(f, c) {
       m = htsmsg_field_get_map(f);
       n = htsmsg_copy(m);
@@ -1372,12 +1373,19 @@ config_migrate_v23 ( void )
       htsmsg_delete_field(n, "major");
       htsmsg_delete_field(n, "minor");
       uuid_init_hex(&u, NULL);
-      hts_settings_remove("epggrab/xmltv/channels/%s", f->hmf_name);
-      hts_settings_save(n, "epggrab/xmltv/channels/%s", u.hex);
+      hts_settings_remove("epggrab/%s/channels/%s", modname, f->hmf_name);
+      hts_settings_save(n, "epggrab/%s/channels/%s", modname, u.hex);
       htsmsg_destroy(n);
     }
     htsmsg_destroy(c);
   }
+}
+
+static void
+config_migrate_v23 ( void )
+{
+  config_migrate_v23_one("xmltv");
+  config_migrate_v23_one("pyepg");
 }
 
 
@@ -1820,11 +1828,12 @@ config_class_info_area_set ( void *o, const void *v )
 }
 
 static void
-config_class_info_area_list1 ( htsmsg_t *m, const char *key, const char *val )
+config_class_info_area_list1 ( htsmsg_t *m, const char *key,
+                               const char *val, const char *lang )
 {
   htsmsg_t *e = htsmsg_create_map();
   htsmsg_add_str(e, "key", key);
-  htsmsg_add_str(e, "val", val);
+  htsmsg_add_str(e, "val", tvh_gettext_lang(lang, val));
   htsmsg_add_msg(m, NULL, e);
 }
 
@@ -1832,9 +1841,9 @@ static htsmsg_t *
 config_class_info_area_list ( void *o, const char *lang )
 {
   htsmsg_t *m = htsmsg_create_list();
-  config_class_info_area_list1(m, "login", N_("Login/Logout"));
-  config_class_info_area_list1(m, "storage", N_("Storage space"));
-  config_class_info_area_list1(m, "time", N_("Time"));
+  config_class_info_area_list1(m, "login", N_("Login/Logout"), lang);
+  config_class_info_area_list1(m, "storage", N_("Storage space"), lang);
+  config_class_info_area_list1(m, "time", N_("Time"), lang);
   return m;
 }
 

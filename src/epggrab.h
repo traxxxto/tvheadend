@@ -82,17 +82,20 @@ typedef struct epggrab_channel
   idnode_t                  idnode;
   TAILQ_ENTRY(epggrab_channel) all_link; ///< Global link
   RB_ENTRY(epggrab_channel) link;     ///< Global tree link
-  epggrab_channel_tree_t    *tree;    ///< Member of this tree
   epggrab_module_t          *mod;     ///< Linked module
 
+  int                       updated;  ///< EPG channel was updated
   int                       enabled;  ///< Enabled/disabled
   char                      *id;      ///< Grabber's ID
 
   char                      *name;    ///< Channel name
+  htsmsg_t                  *names;   ///< List of all channel names for grabber's ID
+  htsmsg_t                  *newnames;///< List of all channel names for grabber's ID (scan)
   char                      *icon;    ///< Channel icon
   char                      *comment; ///< Channel comment (EPG)
   int64_t                   lcn;      ///< Channel number (split)
 
+  int                       only_one; ///< Map to only one channel (auto)
   idnode_list_head_t        channels; ///< Mapped channels (1 = epggrab channel, 2 = channel)
 } epggrab_channel_t;
 
@@ -143,11 +146,12 @@ struct epggrab_module
     EPGGRAB_EXT,
   }                            type;      ///< Grabber type
   const char                   *id;       ///< Module identifier
+  const char                   *saveid;   ///< Module save identifier
   const char                   *name;     ///< Module name (for display)
   int                          enabled;   ///< Whether the module is enabled
   int                          active;    ///< Whether the module is active
   int                          priority;  ///< Priority of the module
-  epggrab_channel_tree_t       *channels; ///< Channel list
+  epggrab_channel_tree_t       channels;  ///< Channel list
 
   /* Activate */
   int       (*activate) ( void *m, int activate );
@@ -238,8 +242,6 @@ struct epggrab_ota_map
 struct epggrab_module_ota
 {
   epggrab_module_t               ;      ///< Parent object
-
-  //TAILQ_HEAD(, epggrab_ota_mux)  muxes; ///< List of related muxes
 
   /* Transponder tuning */
   int  (*start) ( epggrab_ota_map_t *map, struct mpegts_mux *mm );
